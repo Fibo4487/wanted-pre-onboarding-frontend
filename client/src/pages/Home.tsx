@@ -1,11 +1,11 @@
 import React from "react";
 import HomeLayout from "../components/home/HomeLayout";
-import Login from "../components/home/Login";
+import LoginForm from "../components/home/LoginForm";
 
 const Home = () => {
   return (
     <HomeLayout>
-      <Login />
+      <LoginForm />
     </HomeLayout>
   );
 };
