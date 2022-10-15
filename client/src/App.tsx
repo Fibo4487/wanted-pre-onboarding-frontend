@@ -1,7 +1,8 @@
 import React from "react";
-import { BrowserRouter } from "react-router-dom";
 import Router from "./router/Router";
 import GlobalStyle from "./styles/Global";
+
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
