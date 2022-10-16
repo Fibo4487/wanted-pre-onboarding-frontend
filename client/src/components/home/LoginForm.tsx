@@ -1,11 +1,16 @@
 import React from "react";
 import { toast, ToastOptions } from "react-toastify";
 import styled from "styled-components";
+import { useAuthContext } from "../../store/AuthProvider";
+import { AuthApi } from "../../api/AuthApi";
+import { validateLogin } from "../../utils/validateLogin";
 
 const LoginForm = () => {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [isLoginForm, setIsLoginForm] = React.useState(true);
+
+  const { login } = useAuthContext();
 
   const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -15,43 +20,43 @@ const LoginForm = () => {
     setPassword(e.target.value);
   };
 
-  const onClickToggle = () => {
+  const handleClickToggle = () => {
     setIsLoginForm(!isLoginForm);
   };
 
-  const validate = React.useCallback(() => {
-    let isValid = false;
-    const emailValid = email.includes("@");
-    const passwordValid = password.length >= 8;
-    const toastOptions: ToastOptions = {
-      position: "top-center",
-      autoClose: 2000,
-    };
-    if (!email || !password) {
-      toast.error("로그인과 비밀번호를 모두 입력해주세요.", toastOptions);
-    } else {
-      if (!emailValid) {
-        toast.error("이메일 형식이 올바르지 않습니다.", toastOptions);
-      }
-      if (!passwordValid) {
-        toast.error("비밀번호는 8자 이상이어야 합니다.", toastOptions);
+  const validate = React.useCallback(validateLogin, [email, password]);
+
+  const handleLogin = () => {
+    if (!validate(email, password)) {
+      return;
+    }
+    login(email, password);
+  };
+
+  const handleRegister = async () => {
+    if (validate(email, password)) {
+      try {
+        await AuthApi.register(email, password);
+        toast.success("회원가입에 성공했습니다.", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+        setIsLoginForm(true);
+      } catch (error) {
+        toast.error("회원가입에 실패했습니다.", {
+          position: "top-center",
+          autoClose: 2000,
+        });
       }
     }
-
-    if (emailValid && passwordValid) {
-      isValid = true;
-    }
-
-    return isValid;
-  }, [email, password]);
+  };
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const isValid = validate();
-    if (isValid) {
-      toast.success("로그인 성공");
+    if (isLoginForm) {
+      handleLogin();
     } else {
-      return;
+      handleRegister();
     }
   };
 
@@ -61,12 +66,12 @@ const LoginForm = () => {
         {isLoginForm ? (
           <>
             <h1>Login</h1>
-            <button onClick={onClickToggle}>Register</button>
+            <button onClick={handleClickToggle}>Register</button>
           </>
         ) : (
           <>
             <h1>Register</h1>
-            <button onClick={onClickToggle}>Login</button>
+            <button onClick={handleClickToggle}>Login</button>
           </>
         )}
       </Title>
