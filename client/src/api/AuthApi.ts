@@ -1,9 +1,8 @@
 import * as Api from "./Api";
+import errorHandler from "./errorHandler";
 
 interface AuthResponse {
-  data: {
-    access_token: string;
-  };
+  access_token: string;
 }
 
 interface IAuthApi {
@@ -14,18 +13,26 @@ interface IAuthApi {
 export const AuthApi: IAuthApi = (() => {
   return {
     login: async (email: string, password: string) => {
-      const response = await Api.post("auth/login", {
-        email,
-        password,
-      });
-      return response.data;
+      try {
+        const response = await Api.post("auth/signin", {
+          email,
+          password,
+        });
+        return response.data;
+      } catch (error: unknown) {
+        throw errorHandler(error);
+      }
     },
     register: async (email: string, password: string) => {
-      const response = await Api.post("auth/register", {
-        email,
-        password,
-      });
-      return response.data;
+      try {
+        const response = await Api.post("auth/signup", {
+          email,
+          password,
+        });
+        return response.data;
+      } catch (error: unknown) {
+        throw errorHandler(error);
+      }
     },
   };
 })();

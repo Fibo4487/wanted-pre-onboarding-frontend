@@ -1,10 +1,12 @@
 import React from "react";
+import TodoLayout from "../components/todo/TodoLayout";
+import TodoList from "../components/todo/TodoList";
 
 const Todo = () => {
   return (
-    <div>
-      <h1>Todo</h1>
-    </div>
+    <TodoLayout>
+      <TodoList />
+    </TodoLayout>
   );
 };
 

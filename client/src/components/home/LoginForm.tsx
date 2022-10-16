@@ -1,16 +1,19 @@
 import React from "react";
-import { toast, ToastOptions } from "react-toastify";
+import { toast } from "react-toastify";
 import styled from "styled-components";
 import { useAuthContext } from "../../store/AuthProvider";
 import { AuthApi } from "../../api/AuthApi";
 import { validateLogin } from "../../utils/validateLogin";
+import { useNavigate } from "react-router-dom";
+import errorHandler from "../../api/errorHandler";
 
 const LoginForm = () => {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [isLoginForm, setIsLoginForm] = React.useState(true);
 
-  const { login } = useAuthContext();
+  const { setAuthToken } = useAuthContext();
+  const navigate = useNavigate();
 
   const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -30,7 +33,8 @@ const LoginForm = () => {
     if (!validate(email, password)) {
       return;
     }
-    login(email, password);
+    setAuthToken(email, password);
+    navigate("/");
   };
 
   const handleRegister = async () => {
@@ -43,10 +47,7 @@ const LoginForm = () => {
         });
         setIsLoginForm(true);
       } catch (error) {
-        toast.error("회원가입에 실패했습니다.", {
-          position: "top-center",
-          autoClose: 2000,
-        });
+        console.log(errorHandler(error));
       }
     }
   };

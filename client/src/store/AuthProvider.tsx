@@ -1,5 +1,4 @@
 import { createContext, useContext } from "react";
-import { useNavigate } from "react-router-dom";
 import { AuthApi } from "../api/AuthApi";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import { validateLogin } from "../utils/validateLogin";
@@ -10,14 +9,14 @@ interface AuthProviderProps {
 
 interface AuthContextProps {
   token: string | null;
-  login: (email: string, password: string) => Promise<void>;
-  logout: () => void;
+  setAuthToken: (email: string, password: string) => Promise<void>;
+  deleteAuthToken: () => void;
 }
 
 const AuthContext = createContext<AuthContextProps>({
   token: null,
-  login: async () => {},
-  logout: () => {},
+  setAuthToken: async () => {},
+  deleteAuthToken: () => {},
 });
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
@@ -25,30 +24,27 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     "access_token",
     null
   );
-  const navigate = useNavigate();
 
-  const login = async (email: string, password: string) => {
+  const setAuthToken = async (email: string, password: string) => {
     if (!validateLogin(email, password)) {
       return;
     }
     try {
-      const { data } = await AuthApi.login(email, password);
-      setToken(data.access_token);
-      navigate("/");
+      const { access_token } = await AuthApi.login(email, password);
+      setToken(access_token);
     } catch (error) {
       console.error(error);
     }
   };
 
-  const logout = () => {
+  const deleteAuthToken = () => {
     setToken(null);
-    navigate("/");
   };
 
   const value = {
     token,
-    login,
-    logout,
+    setAuthToken,
+    deleteAuthToken,
   };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
