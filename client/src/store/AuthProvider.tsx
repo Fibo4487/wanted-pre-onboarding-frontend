@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       return;
     }
     try {
-      const { access_token } = await AuthApi.login(email, password);
+      const { access_token } = await AuthApi.signIn(email, password);
       setToken(access_token);
     } catch (error) {
       console.error(error);

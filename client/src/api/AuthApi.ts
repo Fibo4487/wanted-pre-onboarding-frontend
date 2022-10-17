@@ -6,13 +6,13 @@ interface AuthResponse {
 }
 
 interface IAuthApi {
-  login: (email: string, password: string) => Promise<AuthResponse>;
-  register: (email: string, password: string) => Promise<AuthResponse>;
+  signIn: (email: string, password: string) => Promise<AuthResponse>;
+  signUp: (email: string, password: string) => Promise<AuthResponse>;
 }
 
 export const AuthApi: IAuthApi = (() => {
   return {
-    login: async (email: string, password: string) => {
+    signIn: async (email: string, password: string) => {
       try {
         const response = await Api.post("auth/signin", {
           email,
@@ -23,7 +23,7 @@ export const AuthApi: IAuthApi = (() => {
         throw errorHandler(error);
       }
     },
-    register: async (email: string, password: string) => {
+    signUp: async (email: string, password: string) => {
       try {
         const response = await Api.post("auth/signup", {
           email,

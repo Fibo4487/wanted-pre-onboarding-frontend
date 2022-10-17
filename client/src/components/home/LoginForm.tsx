@@ -40,7 +40,7 @@ const LoginForm = () => {
   const handleRegister = async () => {
     if (validate(email, password)) {
       try {
-        await AuthApi.register(email, password);
+        await AuthApi.signUp(email, password);
         toast.success("회원가입에 성공했습니다.", {
           position: "top-center",
           autoClose: 2000,
