@@ -9,7 +9,7 @@ interface AuthProviderProps {
 
 interface AuthContextProps {
   token: string | null;
-  setAuthToken: (email: string, password: string) => Promise<void>;
+  setAuthToken: (token: string) => void;
   deleteAuthToken: () => void;
 }
 
@@ -25,16 +25,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     null
   );
 
-  const setAuthToken = async (email: string, password: string) => {
-    if (!validateLogin(email, password)) {
-      return;
-    }
-    try {
-      const { access_token } = await AuthApi.signIn(email, password);
-      setToken(access_token);
-    } catch (error) {
-      console.error(error);
-    }
+  const setAuthToken = async (token: string) => {
+    setToken(token);
   };
 
   const deleteAuthToken = () => {

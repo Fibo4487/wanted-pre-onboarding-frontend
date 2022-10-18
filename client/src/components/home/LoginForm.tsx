@@ -29,12 +29,17 @@ const LoginForm = () => {
 
   const validate = React.useCallback(validateLogin, [email, password]);
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (!validate(email, password)) {
       return;
     }
-    setAuthToken(email, password);
-    navigate("/todo");
+    try {
+      const { access_token } = await AuthApi.signIn(email, password);
+      setAuthToken(access_token);
+      navigate("/todo");
+    } catch (error) {
+      errorHandler(error);
+    }
   };
 
   const handleRegister = async () => {
