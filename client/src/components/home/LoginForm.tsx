@@ -11,6 +11,7 @@ const LoginForm = () => {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [isLoginForm, setIsLoginForm] = React.useState(true);
+  const [isValidate, setIsValidate] = React.useState(false);
 
   const { setAuthToken } = useAuthContext();
   const navigate = useNavigate();
