@@ -1,12 +1,24 @@
 import React from "react";
 import styled from "styled-components";
 import TodoInput from "./TodoInput";
+import { Todo, TodoApi } from "../../api/TodoApi";
+import TodoCards from "./TodoCards";
 
 const TodoList = () => {
+  const [todos, setTodos] = React.useState<Todo[] | null>(null);
+
+  React.useEffect(() => {
+    const fetchTodos = async () => {
+      const todos = await TodoApi.getTodos();
+      setTodos(todos);
+    };
+    fetchTodos();
+  }, []);
+
   return (
     <Container>
       <TodoInput />
-      {/* <TodoItem /> */}
+      {todos && <TodoCards todos={todos} />}
     </Container>
   );
 };
@@ -17,7 +29,6 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
-  justify-content: space-between;
   background-color: #f5f5f5;
   border-radius: 10px;
   border: 1px solid black;

@@ -1,7 +1,7 @@
 import React from "react";
 
 const TodoInput = () => {
-  return <div></div>;
+  return <div>TodoInput</div>;
 };
 
 export default TodoInput;

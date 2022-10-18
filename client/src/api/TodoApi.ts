@@ -1,7 +1,7 @@
 import * as Api from "./Api";
 import errorHandler from "./errorHandler";
 
-interface Todo {
+export interface Todo {
   id: number;
   todo: string;
   isCompleted: boolean;

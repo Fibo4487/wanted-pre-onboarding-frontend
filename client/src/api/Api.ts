@@ -2,10 +2,19 @@ import axios from "axios";
 
 const serverURL = "https://pre-onboarding-selection-task.shop/";
 
-const accessToken = window.localStorage.getItem("access_token");
+const getAccessToken = () => {
+  const accessToken = localStorage.getItem("access_token");
+  if (accessToken) {
+    return JSON.parse(accessToken);
+  } else {
+    return null;
+  }
+};
+
+const accessToken = getAccessToken();
 
 async function get(endpoint: string) {
-  console.log("get", endpoint);
+  console.log("get", endpoint, accessToken);
   return await axios.get(serverURL + endpoint, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
