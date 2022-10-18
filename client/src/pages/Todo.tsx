@@ -1,12 +1,16 @@
 import React from "react";
+import Header from "../components/base/Header";
 import TodoLayout from "../components/todo/TodoLayout";
 import TodoList from "../components/todo/TodoList";
 
 const Todo = () => {
   return (
-    <TodoLayout>
-      <TodoList />
-    </TodoLayout>
+    <>
+      <Header />
+      <TodoLayout>
+        <TodoList />
+      </TodoLayout>
+    </>
   );
 };
 

@@ -1,10 +1,12 @@
 import React from "react";
 import styled from "styled-components";
+import TodoInput from "./TodoInput";
 
 const TodoList = () => {
   return (
     <Container>
-      <h1>TodoList</h1>
+      <TodoInput />
+      {/* <TodoItem /> */}
     </Container>
   );
 };
@@ -22,4 +24,6 @@ const Container = styled.div`
   width: 800px;
   min-height: 500px;
   padding: 20px;
+  overflow-y: auto;
+  scrollbar-width: none;
 `;

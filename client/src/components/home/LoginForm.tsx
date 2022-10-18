@@ -11,7 +11,7 @@ const LoginForm = () => {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [isLoginForm, setIsLoginForm] = React.useState(true);
-  const [isValidate, setIsValidate] = React.useState(false);
+  const [isValid, setIsValid] = React.useState(false);
 
   const { setAuthToken } = useAuthContext();
   const navigate = useNavigate();
@@ -31,30 +31,25 @@ const LoginForm = () => {
   const validate = React.useCallback(validateLogin, [email, password]);
 
   const handleLogin = async () => {
-    if (!validate(email, password)) {
-      return;
-    }
     try {
       const { access_token } = await AuthApi.signIn(email, password);
       setAuthToken(access_token);
       navigate("/todo");
     } catch (error) {
-      errorHandler(error);
+      console.log(error);
     }
   };
 
   const handleRegister = async () => {
-    if (validate(email, password)) {
-      try {
-        await AuthApi.signUp(email, password);
-        toast.success("회원가입에 성공했습니다.", {
-          position: "top-center",
-          autoClose: 2000,
-        });
-        setIsLoginForm(true);
-      } catch (error) {
-        console.log(errorHandler(error));
-      }
+    try {
+      await AuthApi.signUp(email, password);
+      toast.success("회원가입에 성공했습니다.", {
+        position: "top-center",
+        autoClose: 2000,
+      });
+      setIsLoginForm(true);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -66,6 +61,10 @@ const LoginForm = () => {
       handleRegister();
     }
   };
+
+  React.useEffect(() => {
+    setIsValid(validate(email, password));
+  }, [email, password, validate]);
 
   return (
     <Container>
@@ -97,7 +96,9 @@ const LoginForm = () => {
             onChange={onChangePassword}
           />
         </InputContainer>
-        <Submit type="submit">{isLoginForm ? "Login" : "Register"}</Submit>
+        <Submit type="submit" disabled={!isValid}>
+          {isLoginForm ? "Login" : "Register"}
+        </Submit>
       </Form>
     </Container>
   );

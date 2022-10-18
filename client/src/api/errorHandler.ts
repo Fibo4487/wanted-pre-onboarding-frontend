@@ -11,7 +11,10 @@ const errorHandler = (error: unknown) => {
     const { response } = error;
     if (response) {
       const { status } = response;
-      const message = response.data?.message;
+      let message = response.data?.message;
+      if (!message) {
+        message = "Error";
+      }
       if (status === 400) {
         toast.error(`Error400: ${message} `, toastOptions);
       } else if (status === 401) {
