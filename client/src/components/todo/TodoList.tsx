@@ -17,8 +17,8 @@ const TodoList = () => {
 
   return (
     <Container>
-      <TodoInput />
-      {todos && <TodoCards todos={todos} />}
+      <TodoInput setTodos={setTodos} />
+      {todos && <TodoCards todos={todos} setTodos={setTodos} />}
     </Container>
   );
 };
