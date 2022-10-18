@@ -34,7 +34,7 @@ const LoginForm = () => {
       return;
     }
     setAuthToken(email, password);
-    navigate("/");
+    navigate("/todo");
   };
 
   const handleRegister = async () => {
