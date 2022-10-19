@@ -9,12 +9,18 @@ interface TodoCardProps {
 
 const TodoCard = ({ todo, setTodos }: TodoCardProps) => {
   const [isEditing, setIsEditing] = useState(false);
+  const [value, setValue] = useState(todo.todo);
+  const todoID = todo.id;
+
+  const onChangeEditValue = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setValue(e.target.value);
+  };
 
   const handleClickComplete = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const updatedTodo = await TodoApi.updateTodo(
-      todo.id,
+      todoID,
       todo.todo,
       !todo.isCompleted
     );
@@ -29,6 +35,44 @@ const TodoCard = ({ todo, setTodos }: TodoCardProps) => {
     });
   };
 
+  const handleClickDelete = async () => {
+    await TodoApi.deleteTodo(todoID);
+
+    setTodos((prev) => {
+      if (prev) {
+        return prev.filter((todo) => todo.id !== todoID);
+      }
+      return [];
+    });
+  };
+
+  const handleClickEdit = () => {
+    setIsEditing(true);
+  };
+
+  const handleClickCancel = () => {
+    setIsEditing(false);
+  };
+
+  const handleClickSave = async () => {
+    const updatedTodo = await TodoApi.updateTodo(
+      todoID,
+      value,
+      todo.isCompleted
+    );
+
+    setTodos((prev) => {
+      if (prev) {
+        return prev.map((todo) =>
+          todo.id === updatedTodo.id ? updatedTodo : todo
+        );
+      }
+      return [updatedTodo];
+    });
+
+    setIsEditing(false);
+  };
+
   return (
     <Card>
       <TodoCompleteCheckBox
@@ -37,7 +81,7 @@ const TodoCard = ({ todo, setTodos }: TodoCardProps) => {
         onChange={handleClickComplete}
       />
       {isEditing ? (
-        <EditTodo value={todo.todo} onChange={() => {}} />
+        <EditTodo value={value} onChange={onChangeEditValue} />
       ) : (
         <TodoContent>
           <h3>{todo.todo}</h3>
@@ -45,13 +89,13 @@ const TodoCard = ({ todo, setTodos }: TodoCardProps) => {
       )}
       {isEditing ? (
         <>
-          <Button onClick={() => setIsEditing(false)}>Save</Button>
-          <Button onClick={() => setIsEditing(false)}>Cancel</Button>
+          <Button onClick={handleClickSave}>Save</Button>
+          <Button onClick={handleClickCancel}>Cancel</Button>
         </>
       ) : (
         <>
-          <Button onClick={() => setIsEditing(true)}>Edit</Button>
-          <Button>Delete</Button>
+          <Button onClick={handleClickEdit}>Edit</Button>
+          <Button onClick={handleClickDelete}>Delete</Button>
         </>
       )}
     </Card>

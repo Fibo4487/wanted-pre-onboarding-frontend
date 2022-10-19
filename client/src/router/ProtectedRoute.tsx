@@ -10,12 +10,6 @@ interface ProtectedRouteProps {
 
 const ProtectedRoute = ({ children, isLogin }: ProtectedRouteProps) => {
   const { token } = useAuthContext();
-  const alreadyLoginToast = () => {
-    toast.info("이미 로그인 되어있습니다.", {
-      position: "top-center",
-      autoClose: 2000,
-    });
-  };
   const needToLoginToast = () => {
     toast.error("로그인이 필요합니다.", {
       position: "top-center",
@@ -24,7 +18,6 @@ const ProtectedRoute = ({ children, isLogin }: ProtectedRouteProps) => {
   };
   if (isLogin) {
     if (token) {
-      alreadyLoginToast();
       return <Navigate to="/todo" />;
     }
     return <Outlet />;

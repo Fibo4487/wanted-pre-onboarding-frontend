@@ -11,10 +11,8 @@ const getAccessToken = () => {
   }
 };
 
-const accessToken = getAccessToken();
-
 async function get(endpoint: string) {
-  console.log("get", endpoint, accessToken);
+  const accessToken = getAccessToken();
   return await axios.get(serverURL + endpoint, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -23,7 +21,7 @@ async function get(endpoint: string) {
 }
 
 async function post(endpoint: string, data: any) {
-  console.log("post", endpoint, data);
+  const accessToken = getAccessToken();
   const body = JSON.stringify(data);
 
   return await axios.post(serverURL + endpoint, body, {
@@ -35,7 +33,7 @@ async function post(endpoint: string, data: any) {
 }
 
 async function put(endpoint: string, data: any) {
-  console.log("put", endpoint, data);
+  const accessToken = getAccessToken();
   const body = JSON.stringify(data);
 
   return await axios.put(serverURL + endpoint, body, {
@@ -47,7 +45,7 @@ async function put(endpoint: string, data: any) {
 }
 
 async function del(endpoint: string) {
-  console.log("delete", endpoint);
+  const accessToken = getAccessToken();
 
   return await axios.delete(serverURL + endpoint, {
     headers: {
